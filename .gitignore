@@ -1,0 +1,4 @@
+clojure/**/target/
+clojure/**/pom.xml
+clojure/**/.lein-failures
+clojure/**/.lein-repl-history
