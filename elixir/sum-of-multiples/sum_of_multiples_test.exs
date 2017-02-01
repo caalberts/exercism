@@ -62,8 +62,10 @@ defmodule SumOfMultiplesTest do
     assert SumOfMultiples.to(10000, multiples) == 2203160
   end
 
+  # @tag :pending
   test "very large number and many factors" do
-    multiples = Enum.to_list(1..100000)
-    assert SumOfMultiples.to(1_000_000, multiples) == 499999500000
+    n = 10_000_000
+    multiples = Enum.to_list(1..n)
+    assert SumOfMultiples.to(n, multiples) == 49999995000000
   end
 end

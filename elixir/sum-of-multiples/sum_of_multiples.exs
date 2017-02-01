@@ -6,10 +6,10 @@ defmodule SumOfMultiples do
   def to(limit, factors) do
     1..limit-1
     |> Enum.filter(&(is_multiple?(&1, factors)))
-    |> Enum.reduce(&(&1 + &2))
+    |> Enum.sum
   end
 
   defp is_multiple?(num, []), do: false
-  defp is_multiple?(num, [head | tail]) when rem(num, head) == 0, do: true
+  defp is_multiple?(num, [head | _]) when rem(num, head) == 0, do: true
   defp is_multiple?(num, [_ | tail]), do: is_multiple?(num, tail)
 end
