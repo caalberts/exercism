@@ -63,7 +63,7 @@ defmodule BracketPushTest do
     assert BracketPush.check_brackets("[]\n{()}\n[(({}))]\n")
   end
 
-  @tag :pending
+  # @tag :pending
   test "very long strings" do
     n = 100_000
     assert 1..n

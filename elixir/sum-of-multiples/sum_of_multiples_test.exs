@@ -63,9 +63,13 @@ defmodule SumOfMultiplesTest do
   end
 
   # @tag :pending
-  test "very large number and many factors" do
+  test "very large number and many prime factors" do
     n = 10_000_000
-    multiples = Enum.to_list(1..n)
-    assert SumOfMultiples.to(n, multiples) == 49999995000000
+    multiples = prime(1000)
+    assert SumOfMultiples.to(n, multiples) == 46796673688556
   end
+
+
+  def is_prime(x), do: (2..x |> Enum.filter(fn a -> rem(x, a) == 0 end) |> length()) == 1
+  def prime(n), do: Stream.interval(1) |> Stream.drop(2) |> Stream.filter(&is_prime/1) |> Enum.take(n)
 end
