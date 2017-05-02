@@ -4,31 +4,20 @@ defmodule ProteinTranslation do
   """
   @spec of_rna(String.t()) :: { atom,  list(String.t()) }
   def of_rna(rna) do
-    try do
-      result = split_rna([], rna)
-      |> Enum.map(&(of_codon(&1)))
-      |> Enum.map(&(filter_invalid(&1)))
-      |> translate([])
+    rna
+    |> String.graphemes
+    |> Enum.chunk(3)
+    |> Enum.map(&List.to_string/1)
+    |> Enum.reduce_while({:ok, []}, &translate/2)
+  end
 
-      { :ok, result }
-    rescue
-      e in RuntimeError -> { :error, e.message }
+  defp translate(codon, {_, translation}) do
+    case of_codon(codon) do
+      {:ok, "STOP"} -> {:halt, {:ok, translation}}
+      {:ok, protein} -> {:cont, {:ok, translation ++ [protein]}}
+      {:error, _} -> {:halt, {:error, "invalid RNA"}}
     end
-
   end
-
-  defp split_rna(acc, ""), do: acc
-  defp split_rna(acc, rna) do
-    { codon, rest } = String.split_at(rna, 3)
-    split_rna(acc ++ [codon], rest)
-  end
-
-  defp filter_invalid({:error, _}), do: raise "invalid RNA"
-  defp filter_invalid({:ok, _} = result), do: result
-
-  defp translate([], acc), do: acc
-  defp translate([{:ok, "STOP"} | _], acc), do: acc
-  defp translate([{:ok, protein} | t], acc), do: translate(t, acc ++ [protein])
 
   @doc """
   Given a codon, return the corresponding protein
