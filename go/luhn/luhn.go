@@ -14,14 +14,10 @@ func Valid(s string) bool {
 
 	sum := 0
 
-	for i := 0; i < len(digits); i++ {
-		index := len(digits) - 1 - i
-		digit := digits[index]
-
-		if i%2 != 0 {
+	for i, digit := range digits {
+		if (len(digits)-i)%2 == 0 {
 			digit = transformSecondDigit(digit)
 		}
-
 		sum += digit
 	}
 
@@ -30,7 +26,7 @@ func Valid(s string) bool {
 
 func parseDigits(s string) ([]int, error) {
 	stripped := strings.Replace(s, " ", "", -1)
-	if len(stripped) == 1 {
+	if len(stripped) < 2 {
 		return nil, errors.New("string must be longer than 1 character")
 	}
 
@@ -39,7 +35,7 @@ func parseDigits(s string) ([]int, error) {
 
 		digit, err := strconv.Atoi(string(r))
 		if err != nil {
-			return nil, errors.New("string can only contain digits or spaces")
+			return nil, err
 		}
 
 		digits = append(digits, digit)
